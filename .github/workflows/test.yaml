@@ -1,0 +1,84 @@
+name: test
+on:
+  push:
+jobs:
+  yalafi_pip:
+    name: yalafi_pip
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.8
+      - name: update pip
+        run: python3 -m pip install --upgrade pip
+      - name: install yalafi
+        run: python -m pip install yalafi
+      - name: check if yalafi is installed
+        run: python -c "import yalafi"
+  yalafi_local:
+    name: yalafi_local
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.8
+      - name: update pip
+        run: python3 -m pip install --upgrade pip
+      - name: get yalafi
+        run: git clone https://github.com/torik42/YaLafi
+      - name: install yalafi
+        run: |
+          cd YaLafi
+          pip install .
+      - name: check if yalafi is installed
+        run: python -c "import yalafi"
+  yalafi_local_editable:
+    name: yalafi_local
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.8
+      - name: update pip
+        run: python3 -m pip install --upgrade pip
+      - name: get yalafi
+        run: git clone https://github.com/torik42/YaLafi
+      - name: install yalafi
+        run: |
+          cd YaLafi
+          pip install --editable .
+      - name: check if yalafi is installed
+        run: python -c "import yalafi"
+  yalafi_oldBuild:
+    name: yalafi_oldbuild
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.8
+      - name: update pip
+        run: python3 -m pip install --upgrade pip
+      - name: get yalafi
+        run: git clone https://github.com/torik42/YaLafi
+      - name: revert build commit (don't commit, just change)
+        run: |
+          cd YaLafi
+          git revert 4b708d7 --no-commit
+      - name: install yalafi
+        run: |
+          cd YaLafi
+          pip install --editable .
+      - name: check if yalafi is installed
+        run: python -c "import yalafi"
